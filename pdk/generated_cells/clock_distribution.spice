@@ -1,0 +1,9 @@
+* clock_distribution — generated analog netlist (ASAP7 7nm), topology per DESIGN_GUIDELINES.md
+.subckt clock_distribution VDD CKIN CKOUT
+Np0 n1 CKIN VDD VDD pmos_rvt L=21n NFIN=16
+Nn0 n1 CKIN 0 0 nmos_rvt L=21n NFIN=10
+Np1 n2 n1 VDD VDD pmos_rvt L=21n NFIN=16
+Nn1 n2 n1 0 0 nmos_rvt L=21n NFIN=10
+Np2 CKOUT n2 VDD VDD pmos_rvt L=21n NFIN=16
+Nn2 CKOUT n2 0 0 nmos_rvt L=21n NFIN=10
+.ends

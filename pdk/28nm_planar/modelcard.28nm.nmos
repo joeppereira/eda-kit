@@ -1,0 +1,2 @@
+* PREDICTIVE 28nm planar-bulk nmos (BSIM4) — calibrated to PUBLIC targets, NOT a foundry PDK.
+.model nmos_bulk nmos (level=14 version=4.8.2 tnom=27 toxe=2.0n toxp=1.8n toxm=2.0n vth0=0.56 k1=0.50 k2=0.0 u0=0.005 ua=1.2e-9 vsat=9.0e4 rdsw=120 wint=0 lint=0 xj=1.4e-8 nfactor=2.4 voff=-0.11 cdsc=1e-4 cit=0 dvt0=2.0 dvt1=0.5)

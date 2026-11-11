@@ -1,0 +1,75 @@
+# Per-market design configuration — architecture + library + microarch/power states.
+#
+# Reuses the sec-soc config pattern (feature-flag yaml → validated config with
+# invariants). Each market selects a process architecture, a cell library (Vt
+# flavors / drive set), and microarchitecture power states (DVFS operating points,
+# retention, power-gating, body-bias, adaptive clocking — see the sec-soc
+# `adaptive-clocking` skill). Nodes/Vt must exist in pdk_nodes / the ASAP7 cards.
+#
+# INVARIANTS (enforced by market_config.py):
+#   - automotive: temp_max >= 150 AND aging_margin_pct >= 10
+#   - low_power / mobile: power_states.retention_vdd present
+#   - every market: node in the node family, >=1 dvfs state, Vt in {slvt,lvt,rvt}
+
+markets:
+  compute:                       # HPC / datacenter — speed first
+    architecture: {node: "2nm", arch: gaa, fallback_nodes: ["3nm", "4nm"]}
+    library: {vt: [slvt, lvt], drive_strengths: [1, 2, 4, 8], cell_set: lpddr5_phy}
+    power_states:
+      dvfs: [{name: turbo, vdd: 0.66, freq_ghz: 4.0}, {name: nominal, vdd: 0.60, freq_ghz: 3.2}]
+      power_gating: true
+      body_bias: reverse_hp        # RBB to cap leakage at high Vdd
+      adaptive_clocking: avfs       # closed-loop AVFS (adaptive-clocking skill)
+    temp_c: [0, 95]
+    priorities: [speed, bandwidth]
+
+  mobile:                        # phone/tablet — power & area
+    architecture: {node: "3nm", arch: finfet, fallback_nodes: ["4nm", "5nm"]}
+    library: {vt: [lvt, rvt], drive_strengths: [1, 2, 4], cell_set: lpddr5_phy}
+    power_states:
+      dvfs: [{name: perf, vdd: 0.70, freq_ghz: 3.2}, {name: nominal, vdd: 0.60, freq_ghz: 2.1},
+             {name: lp, vdd: 0.50, freq_ghz: 0.8}]
+      retention_vdd: 0.40
+      power_gating: true
+      body_bias: forward_lp
+      adaptive_clocking: dvfs
+    temp_c: [0, 85]
+    priorities: [power, area]
+
+  low_power:                     # IoT / wearable — leakage first
+    architecture: {node: "5nm", arch: finfet, fallback_nodes: ["7nm"]}
+    library: {vt: [rvt], drive_strengths: [1, 2], cell_set: lpddr5_phy}
+    power_states:
+      dvfs: [{name: active, vdd: 0.60, freq_ghz: 1.0}, {name: idle, vdd: 0.50, freq_ghz: 0.2}]
+      retention_vdd: 0.35
+      power_gating: true
+      body_bias: reverse_ll
+      adaptive_clocking: avs
+    temp_c: [0, 85]
+    priorities: [leakage, power]
+
+  automotive:                    # AEC-Q — reliability & temp
+    architecture: {node: "7nm", arch: finfet}
+    library: {vt: [rvt], drive_strengths: [2, 4], cell_set: lpddr5_phy}
+    power_states:
+      dvfs: [{name: nominal, vdd: 0.70, freq_ghz: 2.4}, {name: derated, vdd: 0.66, freq_ghz: 1.8}]
+      retention_vdd: 0.45
+      power_gating: false          # keep always-on domains for safety monitors
+      body_bias: none
+      adaptive_clocking: clock_stretch_droop
+    temp_c: [-40, 150]
+    reliability: {aec_q: grade1, aging_margin_pct: 15, em_derate_pct: 20}
+    priorities: [reliability, margin]
+
+  industrial:                    # wide temp, robustness
+    architecture: {node: "7nm", arch: finfet, fallback_nodes: ["10nm"]}
+    library: {vt: [rvt], drive_strengths: [2, 4], cell_set: lpddr5_phy}
+    power_states:
+      dvfs: [{name: nominal, vdd: 0.70, freq_ghz: 2.0}]
+      retention_vdd: 0.45
+      power_gating: true
+      body_bias: none
+      adaptive_clocking: dvfs
+    temp_c: [-40, 125]
+    reliability: {aging_margin_pct: 12}
+    priorities: [robustness, margin]

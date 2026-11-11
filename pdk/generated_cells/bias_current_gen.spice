@@ -1,0 +1,7 @@
+* bias_current_gen — generated analog netlist (ASAP7 7nm), topology per DESIGN_GUIDELINES.md
+.subckt bias_current_gen VDD IOUT PB
+Nm0 IREF IREF 0 0 nmos_rvt L=21n NFIN=8
+Nm1 IOUT IREF 0 0 nmos_rvt L=21n NFIN=8
+Nm2 IREF PB VDD VDD pmos_rvt L=21n NFIN=12
+RSET VDD IREF 20k
+.ends

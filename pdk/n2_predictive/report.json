@@ -1,0 +1,125 @@
+{
+  "node": "n2_predictive",
+  "arch": "gaa",
+  "vdd": 0.6,
+  "lg": "14n",
+  "targets": {
+    "Ion_uA_min": 40.0,
+    "Ioff_nA": 1.0,
+    "SS_mVdec": 68.0
+  },
+  "achieved": {
+    "Ion_uA": 40.529,
+    "Ioff_nA": 0.3815,
+    "SS_mVdec": 68.3
+  },
+  "params": {
+    "EOT": "1.0n",
+    "TFIN_nm": 7.0,
+    "HFIN_nm": 39.13,
+    "PHIG": 4.34
+  },
+  "iterations": 11,
+  "history": [
+    {
+      "iter": 0,
+      "tfin_nm": 7.0,
+      "hfin_nm": 45.0,
+      "phig": 4.61,
+      "Ion_uA": 6.598,
+      "Ioff_nA": 0.0069,
+      "SS_mVdec": 68.3
+    },
+    {
+      "iter": 1,
+      "tfin_nm": 7.0,
+      "hfin_nm": 120.0,
+      "phig": 4.58,
+      "Ion_uA": 26.039,
+      "Ioff_nA": 0.0184,
+      "SS_mVdec": 68.3
+    },
+    {
+      "iter": 2,
+      "tfin_nm": 7.0,
+      "hfin_nm": 120.0,
+      "phig": 4.55,
+      "Ion_uA": 35.874,
+      "Ioff_nA": 0.0182,
+      "SS_mVdec": 68.3
+    },
+    {
+      "iter": 3,
+      "tfin_nm": 7.0,
+      "hfin_nm": 120.0,
+      "phig": 4.52,
+      "Ion_uA": 46.807,
+      "Ioff_nA": 0.0191,
+      "SS_mVdec": 68.3
+    },
+    {
+      "iter": 4,
+      "tfin_nm": 7.0,
+      "hfin_nm": 104.17,
+      "phig": 4.49,
+      "Ion_uA": 50.859,
+      "Ioff_nA": 0.0199,
+      "SS_mVdec": 68.3
+    },
+    {
+      "iter": 5,
+      "tfin_nm": 7.0,
+      "hfin_nm": 83.92,
+      "phig": 4.46,
+      "Ion_uA": 49.662,
+      "Ioff_nA": 0.0245,
+      "SS_mVdec": 68.3
+    },
+    {
+      "iter": 6,
+      "tfin_nm": 7.0,
+      "hfin_nm": 69.07,
+      "phig": 4.43,
+      "Ion_uA": 48.303,
+      "Ioff_nA": 0.0401,
+      "SS_mVdec": 68.3
+    },
+    {
+      "iter": 7,
+      "tfin_nm": 7.0,
+      "hfin_nm": 58.29,
+      "phig": 4.4,
+      "Ion_uA": 47.173,
+      "Ioff_nA": 0.0807,
+      "SS_mVdec": 68.3
+    },
+    {
+      "iter": 8,
+      "tfin_nm": 7.0,
+      "hfin_nm": 50.25,
+      "phig": 4.37,
+      "Ion_uA": 46.327,
+      "Ioff_nA": 0.1814,
+      "SS_mVdec": 68.3
+    },
+    {
+      "iter": 9,
+      "tfin_nm": 7.0,
+      "hfin_nm": 44.03,
+      "phig": 4.34,
+      "Ion_uA": 45.604,
+      "Ioff_nA": 0.4294,
+      "SS_mVdec": 68.3
+    },
+    {
+      "iter": 10,
+      "tfin_nm": 7.0,
+      "hfin_nm": 39.13,
+      "phig": 4.34,
+      "Ion_uA": 40.529,
+      "Ioff_nA": 0.3815,
+      "SS_mVdec": 68.3
+    }
+  ],
+  "note": "Predictive model from public roadmap ballpark; not foundry-calibrated."
+}

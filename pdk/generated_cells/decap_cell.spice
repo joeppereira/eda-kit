@@ -1,0 +1,4 @@
+* decap_cell — generated analog netlist (ASAP7 7nm), topology per DESIGN_GUIDELINES.md
+.subckt decap_cell VDD
+Ndc VDD VDD 0 0 nmos_rvt L=21n NFIN=64
+.ends

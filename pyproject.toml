@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "eda-kit"
+version = "0.1.0"
+description = "Reusable open-source analog EDA: predictive node family, real ngspice BSIM-CMG simulation, node-portable agentic design, GDS/DRC/LVS. Public data only — never NDA, never sign-off."
+requires-python = ">=3.10"
+dependencies = ["pyyaml"]
+
+[project.optional-dependencies]
+# Layout/DRC/LVS extras (pure-python sim needs none of these).
+layout = ["gdstk", "klayout"]
+dev = ["pytest", "gdstk", "klayout"]
+
+# Flat layout: modules live at the repo root and import each other as top-level
+# names (`from sim import ...`). Install editable (`pip install -e .`) so consumers
+# import the SAME source tree — edits here are instantly live everywhere, and the
+# pdk/ data cards load via __file__-relative paths against the real tree.
+[tool.setuptools]
+py-modules = [
+  "sim", "specs", "pdk_nodes", "profiles",
+  "cells", "cell_generators", "generate_cells_batch",
+  "layout", "drc", "lvs",
+  "market_config", "reconcile_specs",
+  "build_gt2n", "build_n2_predictive", "calibrate_node", "calibrate_planar",
+]

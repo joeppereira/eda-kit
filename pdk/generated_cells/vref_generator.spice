@@ -1,0 +1,7 @@
+* vref_generator — generated analog netlist (ASAP7 7nm), topology per DESIGN_GUIDELINES.md
+.subckt vref_generator VDD VREF
+R0 VDD TAP0 40k
+R1 TAP0 VREF 40k
+R2 VREF 0 40k
+Nmb TAP0 VREF 0 0 nmos_rvt L=21n NFIN=4
+.ends

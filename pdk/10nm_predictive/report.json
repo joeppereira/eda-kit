@@ -1,0 +1,20 @@
+{
+  "node": "10nm",
+  "arch": "finfet",
+  "vdd": 0.75,
+  "lg": "18n",
+  "targets": {
+    "arch": "finfet",
+    "vdd": 0.75,
+    "lg": "18n",
+    "ion_ua": 36.0,
+    "ioff_na": 3.0,
+    "ss": 70.0
+  },
+  "achieved": {
+    "Ion_uA": 39.115,
+    "Ioff_nA": 1.1987,
+    "SS_mVdec": 66.1
+  },
+  "iterations": 12
+}

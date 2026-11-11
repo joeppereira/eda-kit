@@ -1,0 +1,7 @@
+* duty_cycle_corrector — generated analog netlist (ASAP7 7nm), topology per DESIGN_GUIDELINES.md
+.subckt duty_cycle_corrector VDD CKI CKO PB NB
+Np0 CKO CKI PT VDD pmos_rvt L=21n NFIN=16
+Npt PT PB VDD VDD pmos_rvt L=21n NFIN=12
+Nn0 CKO CKI NT 0 nmos_rvt L=21n NFIN=10
+Nnt NT NB 0 0 nmos_rvt L=21n NFIN=12
+.ends

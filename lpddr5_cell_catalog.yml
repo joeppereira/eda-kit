@@ -1,0 +1,169 @@
+# LPDDR5 / LPDDR5X PHY — custom-design cell catalog.
+#
+# Structure + cell set mirror the authoritative "LPDDR5 PHY cell set" status tracker
+# (8 categories, JEDEC-traced). This file is the machine-readable twin of that tracker:
+# the generator/agent targets it, and it records the TRUE build status per cell + the
+# deliverable views each manufacturable macro needs (JESD209-5 / foundry convention).
+#
+# status (what we actually have today, honestly):
+#   spec_sim    — transistor netlist sized & verified to a JESD209-5-traced spec in real
+#                 ngspice (BSIM-CMG via OSDI / ASAP7 7nm / GT2N 2nm). See specs.py.
+#   starter_sim — generated transistor netlist that simulates live (.op/AC), not yet
+#                 spec-sized. From cell_generators.py (run generate_cells_batch.py).
+#   catalog     — topology/intent only (matched pairs, arrays, guard rings); no real sim.
+#   rtl         — synthesizable / firmware; belongs to the digital PHY (sec-soc domain).
+#   foundry     — needs a foundry PDK + qualified kit (ESD, pad, PLL hard-IP); we provide
+#                 topology + sizing guidance only, never a sign-off-ready cell.
+#
+# views  (manufacturable deliverable set, per the tracker's Guidelines + foundry norm):
+#   netlist  schematic/SPICE         layout  GDSII (+LEF abstract)
+#   esd      clamp/diode + PERC      term    ODT / RON / ZQ trim
+#   dft      scan / loopback / mon   nv      fuse / OTP / trim-code store
+#   lib      Liberty .lib (timing)   ibis    IBIS/IBIS-AMI (I/O)
+#   view flags:  have | partial | needed | na
+#
+# predictive-only: every sized cell uses a predictive card (ASAP7 7nm, GT2N 2nm,
+# calibrated FinFET/planar). NEVER a substitute for foundry sign-off (matches the
+# tracker's "GT2N … never for sign-off" rule).
+
+meta:
+  target: LPDDR5 / LPDDR5X PHY (custom analog/mixed-signal)
+  standards: [JESD209-5C, DFI-5.0, JEP155-HBM, JEP157-CDM]
+  pilot_rate_mbps: 6400          # LPDDR5 max (pre-5X); specs.py derives targets from this
+  predictive_pdks: {finfet_7nm: ASAP7, gaa_2nm: GT2N, other: calibrated}
+  counts: {spec_sim: 5, starter_sim: 11, catalog: 15, foundry: 6, rtl: 5}
+  missing_views_global: [lib_timing, ibis, foundry_esd_kit, perc_signoff, full_gds]
+
+categories:
+
+  # 1 — Data I/O (per DQ / DMI lane)
+  data_io:
+    - {cell: dq_tx_driver_lvstl, status: spec_sim, impl: "cells.py:tx_driver",
+       func: "LVSTL push-pull DQ output driver, segmented RON + ZQ-cal",
+       views: {netlist: have, layout: partial, esd: needed, term: partial, dft: needed, nv: needed, lib: needed, ibis: needed}}
+    - {cell: dq_pre_driver, status: catalog,
+       func: "pre-driver / slew-rate + duty control ahead of the output stage",
+       views: {netlist: needed, layout: needed, esd: na, term: na, dft: needed, nv: needed, lib: needed, ibis: na}}
+    - {cell: dq_rx_input_buffer, status: spec_sim, impl: "cells.py:rx_preamp",
+       func: "differential DQ input buffer / CTLE front-end (VREF-referenced)",
+       views: {netlist: have, layout: partial, esd: needed, term: needed, dft: needed, nv: needed, lib: needed, ibis: needed}}
+    - {cell: dq_sampler_strongarm, status: catalog,
+       func: "StrongARM sense-amp sampler + offset trim",
+       views: {netlist: needed, layout: needed, esd: na, term: na, dft: needed, nv: needed, lib: needed, ibis: na}}
+    - {cell: dq_odt_leg, status: spec_sim, impl: "node-migration:cell_design.design_lvstl_leg (sizer); eda-kit:cells.measure_ron (primitive)",
+       func: "LVSTL pull-down / ODT leg sized to RZQ=240Ω on real transistor RON; all RZQ/n steps verified (shared with DQ TX driver's ZQ-cal element)",
+       views: {netlist: have, layout: needed, esd: na, term: have, dft: needed, nv: needed, lib: needed, ibis: na}}
+    - {cell: dmi_tx_rx, status: catalog,
+       func: "data-mask/inversion TX+RX (instances of DQ driver/receiver)",
+       views: {netlist: needed, layout: needed, esd: needed, term: needed, dft: needed, nv: needed, lib: needed, ibis: needed}}
+    - {cell: per_bit_deskew, status: catalog,
+       func: "per-bit programmable delay / phase-interp deskew",
+       views: {netlist: needed, layout: needed, esd: na, term: na, dft: needed, nv: needed, lib: needed, ibis: na}}
+
+  # 2 — Strobe / clock I/O (WCK / RDQS / CK)
+  strobe_clock_io:
+    - {cell: wck_tx_diff, status: starter_sim, impl: "cell_generators.py:clock_distribution",
+       func: "differential write-clock (WCK) transmitter",
+       views: {netlist: have, layout: partial, esd: needed, term: needed, dft: needed, nv: needed, lib: needed, ibis: needed}}
+    - {cell: rdqs_rx_diff, status: starter_sim, impl: "cell_generators.py:ck_wck_receiver",
+       func: "differential read-strobe (RDQS) receiver",
+       views: {netlist: have, layout: partial, esd: needed, term: needed, dft: needed, nv: needed, lib: needed, ibis: needed}}
+    - {cell: rdqs_gating_preamble, status: catalog,
+       func: "strobe gating + preamble/postamble detect",
+       views: {netlist: needed, layout: needed, esd: na, term: na, dft: needed, nv: needed, lib: needed, ibis: na}}
+    - {cell: ck_tx_diff, status: starter_sim, impl: "cell_generators.py:clock_distribution",
+       func: "differential command clock (CK) transmitter",
+       views: {netlist: have, layout: partial, esd: needed, term: needed, dft: needed, nv: needed, lib: needed, ibis: needed}}
+    - {cell: clock_buffer_cml, status: spec_sim, impl: "sim.py/cells.py:CML",
+       func: "CML clock/data buffer (BW traced to WCK, specs.py)",
+       views: {netlist: have, layout: partial, esd: na, term: have, dft: na, nv: na, lib: needed, ibis: na}}
+
+  # 3 — Command/Address I/O
+  ca_io:
+    - {cell: ca_tx, status: catalog, func: "command/address output driver (SE/LVSTL)",
+       views: {netlist: needed, layout: needed, esd: needed, term: needed, dft: needed, nv: needed, lib: needed, ibis: needed}}
+    - {cell: cs_tx, status: catalog, func: "chip-select driver (CA-driver instance)",
+       views: {netlist: needed, layout: needed, esd: needed, term: needed, dft: needed, nv: needed, lib: needed, ibis: needed}}
+    - {cell: reset_n, status: catalog, func: "RESET_n buffer (slow, ESD-robust)",
+       views: {netlist: needed, layout: needed, esd: needed, term: na, dft: needed, nv: na, lib: needed, ibis: na}}
+
+  # 4 — Clocking / timing
+  clocking_timing:
+    - {cell: pll, status: foundry,
+       func: "PLL (VCO+PFD+CP+LF+div) — recommend silicon-proven hard-IP; we give topology + CP sizing",
+       views: {netlist: partial, layout: needed, esd: na, term: na, dft: needed, nv: needed, lib: needed, ibis: na}}
+    - {cell: charge_pump, status: spec_sim, impl: "cells.py:cp",
+       func: "PLL/DLL charge pump, up/down current-matched (up_ratio knob)",
+       views: {netlist: have, layout: needed, esd: na, term: na, dft: na, nv: needed, lib: na, ibis: na}}
+    - {cell: master_dll, status: catalog, func: "master delay line / DLL",
+       views: {netlist: needed, layout: needed, esd: na, term: na, dft: needed, nv: needed, lib: needed, ibis: na}}
+    - {cell: phase_interpolator, status: starter_sim, impl: "cell_generators.py:phase_interpolator",
+       func: "fine delay / phase interpolator (per-lane adjust)",
+       views: {netlist: have, layout: needed, esd: na, term: na, dft: needed, nv: needed, lib: needed, ibis: na}}
+    - {cell: duty_cycle_corrector, status: starter_sim, impl: "cell_generators.py:duty_cycle_corrector",
+       func: "WCK duty-cycle corrector",
+       views: {netlist: have, layout: needed, esd: na, term: na, dft: needed, nv: needed, lib: needed, ibis: na}}
+    - {cell: clock_distribution, status: starter_sim, impl: "cell_generators.py:clock_distribution",
+       func: "CML/CMOS clock tree distribution",
+       views: {netlist: have, layout: partial, esd: na, term: have, dft: na, nv: na, lib: needed, ibis: na}}
+    - {cell: serializer, status: rtl, func: "N:1 serializer (gearbox) — digital PHY",
+       views: {netlist: na, layout: na, esd: na, term: na, dft: needed, nv: na, lib: needed, ibis: na}}
+    - {cell: deserializer, status: rtl, func: "1:N deserializer — digital PHY",
+       views: {netlist: na, layout: na, esd: na, term: na, dft: needed, nv: na, lib: needed, ibis: na}}
+
+  # 5 — Calibration / reference
+  calibration_reference:
+    - {cell: zq_calibration, status: catalog, func: "output-impedance (ZQ) calibration FSM + DAC",
+       views: {netlist: needed, layout: needed, esd: na, term: have, dft: needed, nv: have, lib: needed, ibis: na}}
+    - {cell: vref_dac, status: starter_sim, impl: "cell_generators.py:vref_generator",
+       func: "per-lane VREFDQ DAC (range/step traced to specs.vref_spec)",
+       views: {netlist: have, layout: needed, esd: na, term: na, dft: needed, nv: have, lib: needed, ibis: na}}
+    - {cell: comparator_offset_trim, status: catalog, func: "comparator + offset-trim DAC",
+       views: {netlist: needed, layout: needed, esd: na, term: na, dft: needed, nv: have, lib: needed, ibis: na}}
+    - {cell: bandgap_bias, status: starter_sim, impl: "cell_generators.py:bias_current_gen",
+       func: "current reference + mirrors (bandgap/bias) — bandgap core still catalog",
+       views: {netlist: have, layout: needed, esd: na, term: na, dft: na, nv: needed, lib: na, ibis: na}}
+    - {cell: temp_sensor, status: catalog, func: "temperature sensor (training/derate compensation)",
+       views: {netlist: needed, layout: needed, esd: na, term: na, dft: needed, nv: needed, lib: needed, ibis: na}}
+
+  # 6 — Power / domains
+  power_domains:
+    - {cell: ldo_regulator, status: starter_sim, impl: "cell_generators.py:ldo_regulator",
+       func: "on-PHY LDO supply regulation",
+       views: {netlist: have, layout: needed, esd: na, term: na, dft: na, nv: needed, lib: na, ibis: na}}
+    - {cell: level_shifter, status: starter_sim, impl: "cell_generators.py:level_shifter",
+       func: "core <-> IO voltage-domain level shifter",
+       views: {netlist: have, layout: needed, esd: na, term: na, dft: na, nv: na, lib: needed, ibis: na}}
+    - {cell: power_gate_retention, status: catalog, func: "power gate + state retention",
+       views: {netlist: needed, layout: needed, esd: na, term: na, dft: needed, nv: na, lib: needed, ibis: na}}
+    - {cell: decap, status: starter_sim, impl: "cell_generators.py:decap_cell + layout.py:cap_array",
+       func: "MOS/MOM decoupling capacitor (starter netlist + GDS cap array)",
+       views: {netlist: have, layout: partial, esd: na, term: na, dft: na, nv: na, lib: na, ibis: na}}
+
+  # 7 — ESD / I/O ring (foundry-kit territory — guidance only)
+  esd_io_ring:
+    - {cell: esd_primary_dual_diode, status: foundry, impl: "cell_generators.py:esd_clamp (starter)",
+       func: "primary dual-diode ESD at pad (HBM/CDM) — needs qualified foundry kit",
+       views: {netlist: partial, layout: needed, esd: needed, term: na, dft: na, nv: na, lib: na, ibis: needed}}
+    - {cell: esd_secondary, status: foundry, func: "secondary ESD + series R to core",
+       views: {netlist: partial, layout: needed, esd: needed, term: na, dft: na, nv: na, lib: na, ibis: na}}
+    - {cell: rail_clamp_rc, status: foundry, impl: "cell_generators.py:esd_clamp",
+       func: "RC-triggered supply rail clamp (PERC)",
+       views: {netlist: partial, layout: needed, esd: needed, term: na, dft: na, nv: na, lib: na, ibis: na}}
+    - {cell: pad_bump, status: foundry, func: "I/O pad + microbump cell",
+       views: {netlist: na, layout: needed, esd: needed, term: na, dft: na, nv: na, lib: na, ibis: needed}}
+    - {cell: ring_fillers_corners_cuts, status: foundry, func: "ring fillers / corners / power cuts / seal",
+       views: {netlist: na, layout: needed, esd: na, term: na, dft: na, nv: na, lib: na, ibis: na}}
+
+  # 8 — Test / DFT (mostly digital → sec-soc domain)
+  test_dft:
+    - {cell: internal_loopback, status: rtl, func: "LPDDR5 loopback test mode",
+       views: {netlist: na, layout: na, esd: na, term: na, dft: needed, nv: na, lib: needed, ibis: na}}
+    - {cell: boundary_scan, status: rtl, func: "JTAG / IEEE-1149 boundary scan",
+       views: {netlist: na, layout: na, esd: na, term: na, dft: needed, nv: na, lib: needed, ibis: na}}
+    - {cell: analog_test_bus_mux, status: catalog, func: "analog test bus / observation mux",
+       views: {netlist: needed, layout: needed, esd: na, term: na, dft: needed, nv: na, lib: needed, ibis: na}}
+    - {cell: dc_eye_monitor, status: catalog, func: "on-die DC / eye monitor (training)",
+       views: {netlist: needed, layout: needed, esd: na, term: na, dft: needed, nv: na, lib: needed, ibis: na}}
+    - {cell: bist_pattern_gen_checker, status: rtl, func: "pattern generator / checker (BIST)",
+       views: {netlist: na, layout: na, esd: na, term: na, dft: needed, nv: na, lib: needed, ibis: na}}

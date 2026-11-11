@@ -1,0 +1,11 @@
+* odt_termination — generated analog netlist (ASAP7 7nm), topology per DESIGN_GUIDELINES.md
+.subckt odt_termination PAD EN0 EN1 EN2 EN3 VDD
+R0 PAD t0 240
+Nsw0 t0 EN0 0 0 nmos_rvt L=21n NFIN=16
+R1 PAD t1 240
+Nsw1 t1 EN1 0 0 nmos_rvt L=21n NFIN=16
+R2 PAD t2 240
+Nsw2 t2 EN2 0 0 nmos_rvt L=21n NFIN=16
+R3 PAD t3 240
+Nsw3 t3 EN3 0 0 nmos_rvt L=21n NFIN=16
+.ends

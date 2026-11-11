@@ -1,0 +1,20 @@
+{
+  "node": "40nm",
+  "arch": "planar",
+  "model": "BSIM4",
+  "vdd": 1.1,
+  "lg": "40n",
+  "targets": {
+    "vdd": 1.1,
+    "lg": "40n",
+    "ion_ua": 600.0,
+    "ioff_na": 5.0,
+    "ss": 85.0
+  },
+  "achieved": {
+    "Ion_uA": 663.6,
+    "Ioff_nA": 2.1816,
+    "SS_mVdec": 70.9
+  },
+  "iterations": 26
+}

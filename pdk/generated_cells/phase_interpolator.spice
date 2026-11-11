@@ -1,0 +1,11 @@
+* phase_interpolator — generated analog netlist (ASAP7 7nm), topology per DESIGN_GUIDELINES.md
+.subckt phase_interpolator VDD IP IN QP QN WA WB ON OP
+Na0 ON IP TA 0 nmos_rvt L=21n NFIN=8
+Na1 OP IN TA 0 nmos_rvt L=21n NFIN=8
+Nb0 ON QP TB 0 nmos_rvt L=21n NFIN=8
+Nb1 OP QN TB 0 nmos_rvt L=21n NFIN=8
+RLA VDD ON 300
+RLB VDD OP 300
+Nta TA WA 0 0 nmos_rvt L=21n NFIN=16
+Ntb TB WB 0 0 nmos_rvt L=21n NFIN=16
+.ends

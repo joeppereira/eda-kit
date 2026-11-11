@@ -1,0 +1,8 @@
+* ck_wck_receiver — generated analog netlist (ASAP7 7nm), topology per DESIGN_GUIDELINES.md
+.subckt ck_wck_receiver VDD CKP CKN ON OP VB
+Nin0 ON CKP TAIL 0 nmos_rvt L=21n NFIN=12
+Nin1 OP CKN TAIL 0 nmos_rvt L=21n NFIN=12
+Nld0 ON ON VDD VDD pmos_rvt L=21n NFIN=12
+Nld1 OP ON VDD VDD pmos_rvt L=21n NFIN=12
+Ntl TAIL VB 0 0 nmos_rvt L=21n NFIN=20
+.ends

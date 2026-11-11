@@ -1,0 +1,20 @@
+{
+  "node": "28nm",
+  "arch": "planar",
+  "model": "BSIM4",
+  "vdd": 1.0,
+  "lg": "28n",
+  "targets": {
+    "vdd": 1.0,
+    "lg": "28n",
+    "ion_ua": 650.0,
+    "ioff_na": 5.0,
+    "ss": 82.0
+  },
+  "achieved": {
+    "Ion_uA": 660.5,
+    "Ioff_nA": 13.7523,
+    "SS_mVdec": 71.5
+  },
+  "iterations": 26
+}

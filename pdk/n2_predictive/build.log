@@ -1,0 +1,14 @@
+N2 predictive calibration — targets: Ion≥40.0µA, Ioff≈1.0nA, SS≈68.0mV/dec @ Vdd=0.6
+iter 0: TFIN=7.00n HFIN=45.00n PHIG=4.610 -> Ion=6.598µA Ioff=0.0069nA SS=68.3
+iter 1: TFIN=7.00n HFIN=120.00n PHIG=4.580 -> Ion=26.039µA Ioff=0.0184nA SS=68.3
+iter 2: TFIN=7.00n HFIN=120.00n PHIG=4.550 -> Ion=35.874µA Ioff=0.0182nA SS=68.3
+iter 3: TFIN=7.00n HFIN=120.00n PHIG=4.520 -> Ion=46.807µA Ioff=0.0191nA SS=68.3
+iter 4: TFIN=7.00n HFIN=104.17n PHIG=4.490 -> Ion=50.859µA Ioff=0.0199nA SS=68.3
+iter 5: TFIN=7.00n HFIN=83.92n PHIG=4.460 -> Ion=49.662µA Ioff=0.0245nA SS=68.3
+iter 6: TFIN=7.00n HFIN=69.07n PHIG=4.430 -> Ion=48.303µA Ioff=0.0401nA SS=68.3
+iter 7: TFIN=7.00n HFIN=58.29n PHIG=4.400 -> Ion=47.173µA Ioff=0.0807nA SS=68.3
+iter 8: TFIN=7.00n HFIN=50.25n PHIG=4.370 -> Ion=46.327µA Ioff=0.1814nA SS=68.3
+iter 9: TFIN=7.00n HFIN=44.03n PHIG=4.340 -> Ion=45.604µA Ioff=0.4294nA SS=68.3
+iter 10: TFIN=7.00n HFIN=39.13n PHIG=4.340 -> Ion=40.529µA Ioff=0.3815nA SS=68.3
+converged.
+DONE. iterations=11 achieved={'Ion_uA': 40.529, 'Ioff_nA': 0.3815, 'SS_mVdec': 68.3}

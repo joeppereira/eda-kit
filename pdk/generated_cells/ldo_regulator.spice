@@ -1,0 +1,11 @@
+* ldo_regulator — generated analog netlist (ASAP7 7nm), topology per DESIGN_GUIDELINES.md
+.subckt ldo_regulator VIN VREF VOUT VB VDD
+Nea0 EON VREF ET 0 nmos_rvt L=21n NFIN=8
+Nea1 EO FB ET 0 nmos_rvt L=21n NFIN=8
+Nel0 EON EON VIN VDD pmos_rvt L=21n NFIN=10
+Nel1 EO EON VIN VDD pmos_rvt L=21n NFIN=10
+Net ET VB 0 0 nmos_rvt L=21n NFIN=12
+Npass VOUT EO VIN VDD pmos_rvt L=21n NFIN=120
+RF0 VOUT FB 50k
+RF1 FB 0 50k
+.ends

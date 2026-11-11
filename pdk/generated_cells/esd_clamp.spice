@@ -1,0 +1,6 @@
+* esd_clamp — generated analog netlist (ASAP7 7nm), topology per DESIGN_GUIDELINES.md
+.subckt esd_clamp PAD VDD
+Nclamp PAD TRIG 0 0 nmos_rvt L=21n NFIN=200
+RT PAD TRIG 50k
+CT TRIG 0 200f
+.ends

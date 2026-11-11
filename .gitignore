@@ -1,0 +1,10 @@
+.tools/
+*.osdi
+__pycache__/
+*.pyc
+.pytest_cache/
+layouts/
+*.gds
+
+*.egg-info/
+build/

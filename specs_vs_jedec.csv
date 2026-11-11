@@ -1,0 +1,23 @@
+cell,parameter,target,unit,code_value,check
+PHY (all),Max data rate,6400,Mb/s,6400,PASS
+PHY (all),Unit interval at max rate,156.25,ps,156.25,PASS
+PHY (all),VDDQ nominal,0.5,V,0.5,PASS
+PHY (all),WCK:CK ratio at max rate,4:1,—,4:1,PASS
+PHY (all),DFI frequency ratio,1:1:4,—,1:1:4,PASS
+PHY (all),Channel width,16,x (bits),16,PASS
+DQ TX driver,Ron settings,240/120/80/60/48/40,Ω,240/120/80/60/48/40,PASS
+DQ ODT leg,ODT settings (RZQ steps),240/120/80/60/48/40,Ω,240/120/80/60/48/40,PASS
+WCK TX (diff),WCK frequency at max rate,3200,MHz,3200.0,PASS
+CK TX (diff),CK frequency at max rate,800,MHz,800.0,PASS
+CA TX,CA rate at max data rate,1600,Mb/s,1600.0,PASS
+CA TX,Number of CA bits,7,bits,7,PASS
+DQ sampler,Sampling phases,4,—,4,PASS
+ZQ calibration,External ZQ resistor,240,Ω,240.0,PASS
+Primary ESD,HBM target,1000,V,1000,PASS
+Primary ESD,CDM target,250,V,250,PASS
+Boundary-scan cell,Standard,IEEE 1149.1,—,IEEE 1149.1,PASS
+DQ TX driver,Output slew rate / jitter / pin cap,TBD,—,—,N/A — link/jitter budget
+DQ RX input buffer,Input eye mask,TBD,—,—,N/A — link/jitter budget
+DQ sampler,Residual offset after trim,TBD,—,—,N/A — link/jitter budget
+PLL,RMS jitter,TBD,—,—,N/A — link/jitter budget (silicon-proven hard-IP)
+Rail power clamp,Peak clamp current,TBD,—,—,N/A — foundry ESD kit

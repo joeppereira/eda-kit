@@ -1,0 +1,7 @@
+* level_shifter — generated analog netlist (ASAP7 7nm), topology per DESIGN_GUIDELINES.md
+.subckt level_shifter VDDH IN INB OA OB VDD
+Nx0 OA OB VDDH VDD pmos_rvt L=21n NFIN=10
+Nx1 OB OA VDDH VDD pmos_rvt L=21n NFIN=10
+Ni0 OA IN 0 0 nmos_rvt L=21n NFIN=8
+Ni1 OB INB 0 0 nmos_rvt L=21n NFIN=8
+.ends
